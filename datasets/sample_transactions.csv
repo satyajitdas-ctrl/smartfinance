@@ -1,0 +1,38 @@
+date,description,amount,transaction_type,category
+2026-10-01,Monthly Tech Company Salary Credit,125000,income,Salary
+2026-10-02,Apartment Rental Transfer to Landlord,18000,expense,Rent
+2026-10-03,Swiggy Gourmet Biryani and Kebabs,680,expense,Food
+2026-10-04,Uber Ride to Cyber City Office,245,expense,Transportation
+2026-10-05,Amazon Purchase of Ergonomic Wireless Mouse,1499,expense,Shopping
+2026-10-06,Electricity Bill Payment Adani Power,2150,expense,Bills
+2026-10-07,Blinkit Grocery and Daily Essentials,840,expense,Food
+2026-10-08,Metro Card Smart Auto-Recharge,500,expense,Transportation
+2026-10-09,Netflix 4K Premium Subscription,649,expense,Entertainment
+2026-10-10,Apollo Pharmacy Medicine Prescription,730,expense,Healthcare
+2026-10-11,Zomato Weekend Dinner with Friends,1250,expense,Food
+2026-10-12,Myntra Festive Clothing Sale,2890,expense,Shopping
+2026-10-13,SIP Mutual Fund Auto-Debit HDFC Nifty 50,10000,expense,Investments
+2026-10-14,Ola Cab Airport Drop Ride,620,expense,Transportation
+2026-10-15,BookMyShow IMAX Movie Tickets,950,expense,Entertainment
+2026-10-16,Coursera Machine Learning Specialization,3200,expense,Education
+2026-10-17,Starbucks Cappuccino and Muffin,480,expense,Food
+2026-10-18,Airtel Fiber Broadband Monthly Bill,999,expense,Bills
+2026-10-19,Decathlon Sports Shoes and Gear,2200,expense,Shopping
+2026-10-20,Max Hospital Routine Dental Checkup,1500,expense,Healthcare
+2026-10-21,IndiGo Flight Ticket Delhi to Bengaluru,5600,expense,Travel
+2026-10-22,Cafe Coffee Day Team Catchup,360,expense,Food
+2026-10-23,Spotify Family Plan Subscription,179,expense,Entertainment
+2026-10-24,Zepto Quick Grocery Delivery,410,expense,Food
+2026-10-25,Piped Natural Gas IGL Bill,850,expense,Bills
+2026-10-26,Udemy Full Stack Web Development Course,599,expense,Education
+2026-10-27,Flipkart Big Billion Electronics Sale,4500,expense,Shopping
+2026-10-28,MakeMyTrip Hotel Booking Stay,3800,expense,Travel
+2026-10-29,Dominos Pizza Large Feast,720,expense,Food
+2026-10-30,Zerodha Equity Shares Purchase,5000,expense,Investments
+2026-11-01,Monthly Tech Company Salary Credit,125000,income,Salary
+2026-11-02,Apartment Rental Transfer to Landlord,18000,expense,Rent
+2026-11-03,Swiggy Lunch Order Paneer Butter Masala,450,expense,Food
+2026-11-04,Uber Office Commute Ride,280,expense,Transportation
+2026-11-05,Amazon Electronics Headphone Upgrade,3200,expense,Shopping
+2026-11-05,Reliance Jio Fiber Monthly Plan,999,expense,Bills
+2026-11-06,Zomato Weekend Dinner Delivery,1450,expense,Food
