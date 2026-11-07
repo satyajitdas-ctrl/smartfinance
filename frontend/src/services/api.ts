@@ -211,3 +211,129 @@ export const getModelInfo = async (): Promise<any> => {
   const response = await apiClient.get('/ml/model-info');
   return response.data;
 };
+
+// ----------------------------------------------------
+// Budget APIs
+// ----------------------------------------------------
+
+export interface BudgetStatusItem {
+  id: number;
+  category: string;
+  monthly_limit: number;
+  spent_amount: number;
+  remaining_amount: number;
+  percentage_used: number;
+  month: number;
+  year: number;
+  is_exceeded: boolean;
+}
+
+export interface BudgetStatusResponse {
+  month: number;
+  year: number;
+  total_budget: number;
+  total_spent: number;
+  overall_percentage_used: number;
+  is_overall_exceeded: boolean;
+  budgets: BudgetStatusItem[];
+}
+
+export const getBudgetsStatus = async (
+  month?: number,
+  year?: number
+): Promise<BudgetStatusResponse> => {
+  const params: any = {};
+  if (month) params.month = month;
+  if (year) params.year = year;
+  const response = await apiClient.get<BudgetStatusResponse>('/budgets/status', { params });
+  return response.data;
+};
+
+export const createOrUpdateBudget = async (data: {
+  category: string;
+  monthly_limit: number;
+  month: number;
+  year: number;
+}): Promise<any> => {
+  const response = await apiClient.post('/budgets/', data);
+  return response.data;
+};
+
+export const updateBudgetLimit = async (id: number, monthly_limit: number): Promise<any> => {
+  const response = await apiClient.put(`/budgets/${id}`, { monthly_limit });
+  return response.data;
+};
+
+export const deleteBudget = async (id: number): Promise<any> => {
+  const response = await apiClient.delete(`/budgets/${id}`);
+  return response.data;
+};
+
+export const seedDefaultBudgets = async (month?: number, year?: number): Promise<any[]> => {
+  const params: any = {};
+  if (month) params.month = month;
+  if (year) params.year = year;
+  const response = await apiClient.post<any[]>('/budgets/seed-defaults', {}, { params });
+  return response.data;
+};
+
+// ----------------------------------------------------
+// Anomaly Detection & Forecasting APIs
+// ----------------------------------------------------
+
+export interface AnomalyItem {
+  transaction_id: number;
+  description: string;
+  amount: number;
+  category: string;
+  transaction_date: string;
+  anomaly_reason: string;
+  anomaly_score: number;
+  review_status: string;
+}
+
+export interface ForecastItem {
+  category: string;
+  predicted_amount: number;
+  historical_avg: number;
+  trend: 'increasing' | 'decreasing' | 'stable';
+}
+
+export interface ForecastResponse {
+  forecast_month: string;
+  total_predicted_expense: number;
+  current_budget: number;
+  budget_variance: number;
+  is_budget_exceeded: boolean;
+  categories: ForecastItem[];
+  disclaimer: string;
+}
+
+export const getAnomalies = async (): Promise<AnomalyItem[]> => {
+  const response = await apiClient.get<AnomalyItem[]>('/ml/anomalies');
+  return response.data;
+};
+
+export const triggerAnomalyScan = async (): Promise<{
+  message: string;
+  anomalies_detected: number;
+  anomalies: AnomalyItem[];
+}> => {
+  const response = await apiClient.post('/ml/anomalies/detect');
+  return response.data;
+};
+
+export const reviewAnomaly = async (
+  transaction_id: number,
+  status_choice: string = 'confirmed_ok'
+): Promise<any> => {
+  const response = await apiClient.post(
+    `/ml/anomalies/${transaction_id}/review?status_choice=${status_choice}`
+  );
+  return response.data;
+};
+
+export const getExpenseForecast = async (): Promise<ForecastResponse> => {
+  const response = await apiClient.get<ForecastResponse>('/ml/forecast');
+  return response.data;
+};

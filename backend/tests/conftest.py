@@ -43,3 +43,17 @@ def client(db_session):
     with TestClient(app) as test_client:
         yield test_client
     app.dependency_overrides.clear()
+
+
+@pytest.fixture(scope="function")
+def auth_headers(client):
+    """Registers a default test user and returns Authorization headers."""
+    payload = {
+        "name": "FinWise Test User",
+        "email": "testuser@finwise.ai",
+        "password": "Password123!",
+        "currency": "INR",
+    }
+    res = client.post("/api/v1/auth/register", json=payload)
+    token = res.json()["access_token"]
+    return {"Authorization": f"Bearer {token}"}
