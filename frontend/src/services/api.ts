@@ -134,3 +134,51 @@ export const seedTransactions = async (): Promise<Transaction[]> => {
   const response = await apiClient.post<Transaction[]>('/transactions/seed');
   return response.data;
 };
+
+// Analytics APIs
+export interface CategoryBreakdownItem {
+  category: string;
+  amount: number;
+  percentage: number;
+  count: number;
+  color: string;
+}
+
+export interface MonthlyComparisonItem {
+  category: string;
+  current_month: number;
+  previous_month: number;
+  difference: number;
+  percentage_change: number;
+  trend: 'increased' | 'decreased' | 'neutral';
+}
+
+export interface CashflowTrendItem {
+  month: string;
+  year: number;
+  income: number;
+  expenses: number;
+  savings: number;
+}
+
+export const getCategoryBreakdown = async (): Promise<{
+  total_expense: number;
+  categories: CategoryBreakdownItem[];
+}> => {
+  const response = await apiClient.get('/analytics/category-breakdown');
+  return response.data;
+};
+
+export const getMonthlyComparison = async (): Promise<{
+  current_month: string;
+  previous_month: string;
+  categories: MonthlyComparisonItem[];
+}> => {
+  const response = await apiClient.get('/analytics/monthly-comparison');
+  return response.data;
+};
+
+export const getCashflowTrends = async (): Promise<CashflowTrendItem[]> => {
+  const response = await apiClient.get<CashflowTrendItem[]>('/analytics/cashflow-trends');
+  return response.data;
+};
