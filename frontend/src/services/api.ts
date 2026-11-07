@@ -182,3 +182,32 @@ export const getCashflowTrends = async (): Promise<CashflowTrendItem[]> => {
   const response = await apiClient.get<CashflowTrendItem[]>('/analytics/cashflow-trends');
   return response.data;
 };
+
+// Machine Learning APIs
+export interface CategoryPrediction {
+  description: string;
+  predicted_category: string;
+  confidence: number;
+  model_version: string;
+}
+
+export const predictCategory = async (description: string): Promise<CategoryPrediction> => {
+  const response = await apiClient.post<CategoryPrediction>('/ml/predict-category', {
+    description,
+  });
+  return response.data;
+};
+
+export const correctCategory = async (data: {
+  description: string;
+  original_category: string;
+  corrected_category: string;
+}): Promise<any> => {
+  const response = await apiClient.post('/ml/correct-category', data);
+  return response.data;
+};
+
+export const getModelInfo = async (): Promise<any> => {
+  const response = await apiClient.get('/ml/model-info');
+  return response.data;
+};

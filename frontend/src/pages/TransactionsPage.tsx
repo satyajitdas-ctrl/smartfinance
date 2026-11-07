@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Plus,
   Search,
@@ -10,7 +10,9 @@ import {
   Calendar,
   Sparkles,
   RefreshCw,
-  Database
+  Database,
+  Cpu,
+  CheckCircle2
 } from 'lucide-react';
 import type { Transaction } from '../types';
 import {
@@ -19,6 +21,10 @@ import {
   updateTransaction,
   deleteTransaction,
   seedTransactions,
+  predictCategory,
+  correctCategory,
+  getModelInfo,
+  CategoryPrediction
 } from '../services/api';
 
 export const TransactionsPage: React.FC = () => {
@@ -41,6 +47,12 @@ export const TransactionsPage: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
 
+  // ML Categorizer State
+  const [mlPrediction, setMlPrediction] = useState<CategoryPrediction | null>(null);
+  const [predicting, setPredicting] = useState(false);
+  const [correctionFeedback, setCorrectionFeedback] = useState<string | null>(null);
+  const [modelTelemetry, setModelTelemetry] = useState<any>(null);
+
   const categories = [
     'All',
     'Food',
@@ -56,6 +68,13 @@ export const TransactionsPage: React.FC = () => {
     'Salary',
     'Other',
   ];
+
+  // Fetch ML Model Info on Mount
+  useEffect(() => {
+    getModelInfo()
+      .then((info) => setModelTelemetry(info))
+      .catch((err) => console.log('ML model info unavailable:', err));
+  }, []);
 
   // Fetch transactions from FastAPI backend
   const fetchTxList = useCallback(async () => {
@@ -80,6 +99,48 @@ export const TransactionsPage: React.FC = () => {
     }, 250);
     return () => clearTimeout(debounce);
   }, [fetchTxList]);
+
+  // ML Category Prediction Debounced
+  useEffect(() => {
+    if (formType !== 'expense' || !formDesc.trim() || formDesc.trim().length < 3) {
+      setMlPrediction(null);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      try {
+        setPredicting(true);
+        const res = await predictCategory(formDesc.trim());
+        setMlPrediction(res);
+        setFormCategory(res.predicted_category);
+      } catch (err) {
+        console.error('Failed to predict category:', err);
+      } finally {
+        setPredicting(false);
+      }
+    }, 350);
+
+    return () => clearTimeout(timer);
+  }, [formDesc, formType]);
+
+  const handleCategoryChange = async (newCategory: string) => {
+    setFormCategory(newCategory);
+
+    // If user changed away from AI predicted category, log correction for model retraining
+    if (mlPrediction && mlPrediction.predicted_category !== newCategory && formDesc.trim()) {
+      try {
+        await correctCategory({
+          description: formDesc.trim(),
+          original_category: mlPrediction.predicted_category,
+          corrected_category: newCategory,
+        });
+        setCorrectionFeedback(`Feedback recorded: "${formDesc.trim()}" -> ${newCategory}`);
+        setTimeout(() => setCorrectionFeedback(null), 4000);
+      } catch (err) {
+        console.error('Failed to record category correction:', err);
+      }
+    }
+  };
 
   // Handle Create Transaction
   const handleCreateTx = async (e: React.FormEvent) => {
@@ -172,6 +233,8 @@ export const TransactionsPage: React.FC = () => {
     setFormCategory('Food');
     setFormDate(new Date().toISOString().split('T')[0]);
     setActionError(null);
+    setMlPrediction(null);
+    setCorrectionFeedback(null);
   };
 
   return (
@@ -179,9 +242,17 @@ export const TransactionsPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-white">Transaction Management</h2>
+          <div className="flex items-center gap-2.5">
+            <h2 className="text-2xl font-bold tracking-tight text-white">Transaction Management</h2>
+            {modelTelemetry && (
+              <span className="inline-flex items-center gap-1 rounded-full border border-purple-500/30 bg-purple-500/10 px-2.5 py-0.5 text-[11px] font-medium text-purple-300">
+                <Cpu className="h-3 w-3 text-purple-400" />
+                <span>TF-IDF Classifier Active</span>
+              </span>
+            )}
+          </div>
           <p className="text-xs text-slate-400">
-            View, add, edit, and filter your financial ledger stored in FastAPI & SQLite
+            View, add, edit, and filter your financial ledger with automatic ML category inference
           </p>
         </div>
 
@@ -438,9 +509,37 @@ export const TransactionsPage: React.FC = () => {
                   required
                   value={formDesc}
                   onChange={(e) => setFormDesc(e.target.value)}
-                  placeholder="e.g. Swiggy Food Order, Uber Metro Commute"
+                  placeholder="e.g. Swiggy Food Order, Uber Metro Commute, Amazon Purchase"
                   className="w-full rounded-xl border border-slate-800 bg-slate-950 p-2.5 text-xs text-white focus:border-brand-500 focus:outline-none"
                 />
+
+                {/* ML Inference Status */}
+                {predicting && (
+                  <div className="mt-1.5 flex items-center gap-1.5 text-[11px] text-purple-400 animate-pulse">
+                    <Sparkles className="h-3 w-3" />
+                    <span>AI classifying transaction category using TF-IDF + Logistic Regression...</span>
+                  </div>
+                )}
+
+                {mlPrediction && !predicting && (
+                  <div className="mt-2 flex items-center justify-between rounded-xl border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 text-xs text-purple-300">
+                    <div className="flex items-center gap-1.5">
+                      <Sparkles className="h-3.5 w-3.5 text-purple-400" />
+                      <span>
+                        AI Suggested: <strong className="text-white">{mlPrediction.predicted_category}</strong>{' '}
+                        ({Math.round(mlPrediction.confidence * 100)}% confidence)
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-slate-400 font-mono">v{mlPrediction.model_version}</span>
+                  </div>
+                )}
+
+                {correctionFeedback && (
+                  <div className="mt-2 flex items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs text-emerald-300">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+                    <span>{correctionFeedback}</span>
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-3">
@@ -461,11 +560,11 @@ export const TransactionsPage: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                    Category
+                    Category {mlPrediction && <span className="text-[10px] text-purple-400 font-normal">(Auto-selected)</span>}
                   </label>
                   <select
                     value={formCategory}
-                    onChange={(e) => setFormCategory(e.target.value)}
+                    onChange={(e) => handleCategoryChange(e.target.value)}
                     className="w-full rounded-xl border border-slate-800 bg-slate-950 p-2.5 text-xs text-white focus:border-brand-500 focus:outline-none"
                   >
                     {categories.filter((c) => c !== 'All').map((c) => (
