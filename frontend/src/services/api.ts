@@ -337,3 +337,74 @@ export const getExpenseForecast = async (): Promise<ForecastResponse> => {
   const response = await apiClient.get<ForecastResponse>('/ml/forecast');
   return response.data;
 };
+
+// ----------------------------------------------------
+// AI Finance Assistant APIs
+// ----------------------------------------------------
+
+export interface ChatMessage {
+  id?: number;
+  message: string;
+  response: string;
+  intent?: string;
+  created_at?: string;
+}
+
+export const sendChatMessage = async (message: string): Promise<ChatMessage> => {
+  const response = await apiClient.post<ChatMessage>('/assistant/chat', { message });
+  return response.data;
+};
+
+export const getChatHistory = async (): Promise<ChatMessage[]> => {
+  const response = await apiClient.get<ChatMessage[]>('/assistant/history');
+  return response.data;
+};
+
+export const clearChatHistory = async (): Promise<{ message: string }> => {
+  const response = await apiClient.delete<{ message: string }>('/assistant/history');
+  return response.data;
+};
+
+// ----------------------------------------------------
+// Reports & CSV Import/Export APIs
+// ----------------------------------------------------
+
+export interface CSVImportResult {
+  message: string;
+  total_rows_evaluated: number;
+  imported_count: number;
+  duplicates_skipped: number;
+  errors_count: number;
+  errors: string[];
+}
+
+export const downloadSampleCSV = async (): Promise<void> => {
+  const response = await apiClient.get('/reports/sample-csv', { responseType: 'blob' });
+  const url = window.URL.createObjectURL(new Blob([response.data]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', 'finwise_sample_transactions.csv');
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+};
+
+export const exportTransactionsCSV = async (): Promise<void> => {
+  const response = await apiClient.get('/reports/export-csv', { responseType: 'blob' });
+  const url = window.URL.createObjectURL(new Blob([response.data]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', 'finwise_transactions.csv');
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+};
+
+export const importTransactionsCSV = async (file: File): Promise<CSVImportResult> => {
+  const formData = new FormData();
+  formData.append('file', file);
+  const response = await apiClient.post<CSVImportResult>('/reports/import-csv', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  return response.data;
+};
