@@ -132,7 +132,7 @@ npm run dev      # Starts Vite local development server
 ## 🧪 7-Day Development Schedule & Roadmap
 
 - [x] **DAY 1 — Repository & Project Setup**: Project architecture, FastAPI backend with SQLite/PostgreSQL engine, SQLAlchemy ORM models, Pydantic v2 schemas, JWT authentication, React + TypeScript Vite frontend, Tailwind CSS FinTech SaaS layout, automated PyTest suite.
-- [ ] **DAY 2 — Authentication & Transactions**: Full CRUD endpoints for transactions, manual transaction entry modal, search & category filtering, sample transaction database seeding.
+- [x] **DAY 2 — Authentication & Transactions**: Full CRUD endpoints for transactions (`POST`, `GET`, `PUT`, `DELETE` at `/api/v1/transactions`), live transaction summary telemetry (`/transactions/summary`), user data isolation security tests, interactive transaction entry & edit modals, real-time category & search filtering, automated realistic Indian transaction seeder (`/transactions/seed`), and dynamic dashboard synchronization.
 - [ ] **DAY 3 — Dashboard & Analytics**: Dynamic calculations for Balance, Income, Expense, Savings Rate, Category breakdowns, and real-time Recharts visualizations.
 - [ ] **DAY 4 — Machine Learning Categorisation**: TF-IDF + Logistic Regression training pipeline, Joblib model serialization, live prediction endpoint on transaction entry, user correction mechanism.
 - [ ] **DAY 5 — Budget Forecasting & Anomaly Detection**: Isolation Forest anomaly detection engine, statistical threshold flagging, time-series monthly spending regression.
