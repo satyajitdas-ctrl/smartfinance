@@ -8,7 +8,8 @@ import {
   ArrowRight,
   CheckCircle2,
   Database,
-  RefreshCw
+  RefreshCw,
+  AlertTriangle
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -32,7 +33,11 @@ import {
   getTransactionSummary,
   getTransactions,
   seedTransactions,
-  type TransactionSummaryData
+  getCashflowTrends,
+  getAnomalies,
+  type TransactionSummaryData,
+  type CashflowTrendItem,
+  type AnomalyItem
 } from '../services/api';
 
 export const DashboardPage: React.FC = () => {
@@ -50,6 +55,8 @@ export const DashboardPage: React.FC = () => {
   });
   const [recentTx, setRecentTx] = useState<Transaction[]>([]);
   const [categoryData, setCategoryData] = useState<{ name: string; value: number; color: string }[]>([]);
+  const [trendsData, setTrendsData] = useState<CashflowTrendItem[]>([]);
+  const [anomalies, setAnomalies] = useState<AnomalyItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   const colors = ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#06b6d4', '#8b5cf6', '#f43f5e'];
@@ -57,28 +64,39 @@ export const DashboardPage: React.FC = () => {
   const loadDashboardData = async () => {
     try {
       setLoading(true);
-      const [summaryRes, txList] = await Promise.all([
+      const [summaryRes, txList, trendsRes, anomRes] = await Promise.allSettled([
         getTransactionSummary(),
         getTransactions({ limit: 100 }),
+        getCashflowTrends(),
+        getAnomalies(),
       ]);
 
-      setSummary(summaryRes);
-      setRecentTx(txList.slice(0, 5));
+      if (summaryRes.status === 'fulfilled') setSummary(summaryRes.value);
+      if (txList.status === 'fulfilled') {
+        const txs = txList.value;
+        setRecentTx(txs.slice(0, 5));
 
-      // Calculate real category breakdown for expenses
-      const catMap: Record<string, number> = {};
-      txList
-        .filter((t) => t.transaction_type === 'expense')
-        .forEach((t) => {
-          catMap[t.category] = (catMap[t.category] || 0) + t.amount;
-        });
+        // Calculate real category breakdown for expenses
+        const catMap: Record<string, number> = {};
+        txs
+          .filter((t) => t.transaction_type === 'expense')
+          .forEach((t) => {
+            catMap[t.category] = (catMap[t.category] || 0) + t.amount;
+          });
 
-      const pieData = Object.entries(catMap).map(([name, value], i) => ({
-        name,
-        value: Math.round(value),
-        color: colors[i % colors.length],
-      }));
-      setCategoryData(pieData);
+        const pieData = Object.entries(catMap).map(([name, value], i) => ({
+          name,
+          value: Math.round(value),
+          color: colors[i % colors.length],
+        }));
+        setCategoryData(pieData);
+      }
+      if (trendsRes.status === 'fulfilled' && trendsRes.value.length > 0) {
+        setTrendsData(trendsRes.value);
+      }
+      if (anomRes.status === 'fulfilled') {
+        setAnomalies(anomRes.value);
+      }
     } catch (err) {
       console.warn('Failed to load dashboard data:', err);
     } finally {
@@ -99,20 +117,27 @@ export const DashboardPage: React.FC = () => {
     }
   };
 
-  // Monthly trends visualization data
-  const monthlyTrendsData = [
-    { month: 'Jun', income: 110000, expenses: 52000, savings: 58000 },
-    { month: 'Jul', income: 115000, expenses: 48000, savings: 67000 },
-    { month: 'Aug', income: 115000, expenses: 54000, savings: 61000 },
-    { month: 'Sep', income: 120000, expenses: 49000, savings: 71000 },
-    { month: 'Oct', income: 120000, expenses: 51200, savings: 68800 },
-    {
-      month: 'Nov',
-      income: summary.total_income || 125000,
-      expenses: summary.total_expenses || 46550,
-      savings: summary.total_savings || 78450,
-    },
-  ];
+  // Monthly trends visualization data (live API trends or fallback)
+  const monthlyTrendsData = trendsData.length > 0
+    ? trendsData.map((t) => ({
+        month: t.month,
+        income: t.income,
+        expenses: t.expenses,
+        savings: t.savings,
+      }))
+    : [
+        { month: 'Jun', income: 110000, expenses: 52000, savings: 58000 },
+        { month: 'Jul', income: 115000, expenses: 48000, savings: 67000 },
+        { month: 'Aug', income: 115000, expenses: 54000, savings: 61000 },
+        { month: 'Sep', income: 120000, expenses: 49000, savings: 71000 },
+        { month: 'Oct', income: 120000, expenses: 51200, savings: 68800 },
+        {
+          month: 'Nov',
+          income: summary.total_income || 125000,
+          expenses: summary.total_expenses || 46550,
+          savings: summary.total_savings || 78450,
+        },
+      ];
 
   return (
     <div className="space-y-8">
@@ -122,7 +147,7 @@ export const DashboardPage: React.FC = () => {
           <div>
             <div className="inline-flex items-center gap-2 rounded-full bg-brand-500/15 px-3 py-1 text-xs font-semibold text-brand-400 border border-brand-500/20 mb-3">
               <Sparkles className="h-3.5 w-3.5" />
-              <span>FinWise AI Intelligence Core &bull; Day 2 Live Sync</span>
+              <span>FinWise AI Intelligence Core &bull; Production Platform Active</span>
             </div>
             <h2 className="text-2xl font-black tracking-tight text-white lg:text-3xl">
               Welcome back, {user?.name || 'Explorer'}!
@@ -167,6 +192,33 @@ export const DashboardPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Active Anomalies Notification Banner */}
+      {anomalies.length > 0 && (
+        <div
+          onClick={() => navigate('/insights')}
+          className="cursor-pointer rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4 transition-all hover:border-amber-500/70 hover:bg-amber-500/15 backdrop-blur-md"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400">
+                <AlertTriangle className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-white">
+                  {anomalies.length} Unusual Spending Outlier{anomalies.length > 1 ? 's' : ''} Flagged by Isolation Forest
+                </p>
+                <p className="text-[11px] text-amber-300/80">
+                  Statistical anomaly detected in your expense transactions. Click to review.
+                </p>
+              </div>
+            </div>
+            <span className="flex items-center gap-1 text-xs font-semibold text-amber-400 hover:text-amber-300">
+              Review Now &rarr;
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Top Telemetry KPI Cards */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
