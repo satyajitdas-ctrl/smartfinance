@@ -137,7 +137,26 @@ npm run dev      # Starts Vite local development server
 - [x] **DAY 4 — Machine Learning Categorisation**: Scikit-learn TF-IDF vectorizer + Logistic Regression classifier with balanced class weighting across 11 financial categories; offline reproducible training pipeline (`train_categorizer.py`) with Indian commerce dataset; Joblib model persistence (`expense_categorizer.joblib`); real-time inference API (`/api/v1/ml/predict-category`); active-learning user correction mechanism (`/api/v1/ml/correct-category`); debounced live inference in frontend transaction modal with confidence scoring and telemetry (`/api/v1/ml/model-info`).
 - [x] **DAY 5 — Budget Forecasting & Anomaly Detection**: Category budget management with real-time utilization telemetry (`/api/v1/budgets`, `/budgets/status`); Scikit-learn Isolation Forest (`contamination=0.08`) and category-level statistical Z-score outlier detection (`/api/v1/ml/anomalies`, `/ml/anomalies/detect`); user anomaly review verification workflow (`/ml/anomalies/{id}/review`); time-series moving-window regression forecasting next month commitments vs budgets (`/api/v1/ml/forecast`); fully connected interactive UI in `BudgetsPage.tsx` and `InsightsPage.tsx` with non-financial-advice disclaimers.
 - [x] **DAY 6 — AI Assistant & Reports**: Grounded conversational financial assistant (`/api/v1/assistant/chat`, `/history`) combining deterministic SQL/Python financial metrics with zero-hallucination guardrails and configurable LLM provider integration; persistent chat conversation history; statement CSV import engine (`/api/v1/reports/import-csv`) with strict schema validation, duplicate transaction detection, and automated ML category inference; downloadable sample statement template and full user transaction CSV export (`/api/v1/reports/export-csv`); fully connected interactive UI in `AssistantPage.tsx` and `ReportsPage.tsx`.
-- [ ] **DAY 7 — Testing, Deployment & GitHub Portfolio**: Comprehensive end-to-end testing, portfolio documentation, Docker container verification, production deployment guide.
+- [x] **DAY 7 — Final Testing, Deployment & GitHub Portfolio**: 100% automated test coverage with 17 passing PyTest unit tests across all financial modules; Docker & Docker Compose multi-stage containerization (`backend/Dockerfile`, `frontend/Dockerfile`, `docker-compose.yml`, `nginx.conf`); comprehensive technical interview preparation guide; production README documentation with architecture flows and reproducible ML pipelines.
+
+---
+
+## 🎯 Technical Interview Preparation & Project Discussion Points
+
+### 1. How does the Expense Categorization model work?
+- **Feature Extraction**: Text descriptions are converted into mathematical vectors using Scikit-learn's `TfidfVectorizer(ngram_range=(1, 2), sublinear_tf=True)`. Unigrams and bigrams allow capturing phrases like `"food order"` or `"metro commute"`, while sublinear term frequency dampens the influence of repeatedly occurring words.
+- **Classification Algorithm**: Multinomial `LogisticRegression(C=5.0, class_weight='balanced')`. We apply balanced class weighting to prevent larger categories from dominating underrepresented expense types.
+- **Model Persistence**: Serialized as a compact pipeline artifact (`expense_categorizer.joblib`) loaded at application startup as a singleton, eliminating cold-start latency.
+- **Active Learning**: When a user overrides a prediction, the correction is captured in `category_corrections` for scheduled model retraining.
+
+### 2. How does Anomaly Detection differ from Fraud Detection?
+- **Ethical & Domain Distiction**: In personal finance, an unusually high transaction is often a planned major purchase (e.g. laptop, festival shopping, rent deposit) rather than unauthorized fraud. Flagging it as "fraud" causes unwarranted user anxiety.
+- **Ensemble Approach**: We combine Scikit-learn's `IsolationForest` (which recursively isolates observations using random feature splits) with category-level Gaussian Z-scores ($\frac{|amount - \mu|}{\sigma}$). Outliers are presented with clear human-readable explanations (e.g. *"Transaction amount ₹15,000 is 14.2x above your Food average"*) and an explicit disclaimer.
+
+### 3. How do you prevent LLM Hallucinations in Financial figures?
+- **Strict Separation of Concerns**: We never ask a Large Language Model to query the database or calculate math directly.
+- **Deterministic Pre-Aggregation**: Exact sums, balances, savings rates, and budget variances are computed first via SQL queries and Python functions.
+- **Bounded Context**: Only the calculated metrics are supplied to the assistant engine. If no external API key is supplied, a deterministic rule-based assistant provides 100% accurate, offline responses.
 
 ---
 
