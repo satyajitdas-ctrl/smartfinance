@@ -184,6 +184,52 @@ export const AnalyticsPage: React.FC = () => {
           </p>
         </div>
       </div>
+
+      {/* Category Breakdown Table & Share List */}
+      <div className="rounded-2xl border border-slate-800/80 bg-slate-900/70 p-6 backdrop-blur-md">
+        <h3 className="text-base font-bold text-white mb-1">Category Spending Distribution</h3>
+        <p className="text-xs text-slate-400 mb-6">
+          Detailed share of expenditures by lifestyle category for {currMonthName}
+        </p>
+
+        {breakdown.length === 0 ? (
+          <div className="py-8 text-center text-xs text-slate-500">
+            No category distribution data recorded yet.
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {breakdown.map((item) => (
+              <div key={item.category} className="space-y-1.5">
+                <div className="flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="h-3 w-3 rounded-full"
+                      style={{ backgroundColor: item.color || '#6366f1' }}
+                    />
+                    <span className="font-semibold text-white">{item.category}</span>
+                    <span className="text-[11px] text-slate-400">({item.count} items)</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-slate-400 font-mono text-[11px]">{item.percentage}%</span>
+                    <span className="font-bold text-white">
+                      ₹{item.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                    </span>
+                  </div>
+                </div>
+                <div className="h-2 w-full overflow-hidden rounded-full bg-slate-950">
+                  <div
+                    className="h-full rounded-full transition-all duration-500"
+                    style={{
+                      width: `${item.percentage}%`,
+                      backgroundColor: item.color || '#6366f1',
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
