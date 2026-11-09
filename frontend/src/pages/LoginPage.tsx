@@ -37,9 +37,18 @@ export const LoginPage: React.FC = () => {
   };
 
   const fillDemoAccount = () => {
+    setIsRegister(false);
     setEmail('satyajit@example.com');
     setPassword('SecurePassword123!');
     setName('Satyajit Das');
+    setError(null);
+  };
+
+  const fillUatAccount = () => {
+    setIsRegister(false);
+    setEmail('uat.tester@finwise.ai');
+    setPassword('UatTesting2026!');
+    setName('UAT SDLC Tester');
     setError(null);
   };
 
@@ -165,8 +174,8 @@ export const LoginPage: React.FC = () => {
             </button>
           </form>
 
-          {/* Quick Demo Helper */}
-          <div className="mt-6 border-t border-slate-800/80 pt-5">
+          {/* Quick Demo & UAT Helpers */}
+          <div className="mt-6 border-t border-slate-800/80 pt-5 space-y-2">
             <button
               type="button"
               onClick={fillDemoAccount}
@@ -174,9 +183,21 @@ export const LoginPage: React.FC = () => {
             >
               <span className="flex items-center gap-1.5">
                 <Shield className="h-3.5 w-3.5 text-brand-400" />
-                <span>Fill Demo Credentials (1-Click)</span>
+                <span>Fill Pre-Populated Demo (Satyajit)</span>
               </span>
               <span className="font-semibold text-brand-400">&rarr;</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={fillUatAccount}
+              className="flex w-full items-center justify-between rounded-xl border border-emerald-500/30 bg-emerald-500/5 px-3.5 py-2.5 text-xs font-medium text-emerald-300 hover:bg-emerald-500/10 transition-colors"
+            >
+              <span className="flex items-center gap-1.5">
+                <CheckCircle className="h-3.5 w-3.5 text-emerald-400" />
+                <span>Fill Clean UAT Testing Account (Tester)</span>
+              </span>
+              <span className="font-semibold text-emerald-400">&rarr;</span>
             </button>
           </div>
         </div>

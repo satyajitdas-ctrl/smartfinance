@@ -9,7 +9,8 @@ from app.models.budget import Budget
 def seed_initial_data(db: Session) -> None:
     """
     Ensures that the default demo account, sample transactions,
-    and monthly budgets exist so new clones and local runs work out-of-the-box.
+    monthly budgets, and clean UAT tester account exist so
+    new clones and local runs work out-of-the-box.
     """
     demo_email = "satyajit@example.com"
     demo_user = db.query(User).filter(User.email == demo_email).first()
@@ -25,6 +26,21 @@ def seed_initial_data(db: Session) -> None:
         db.commit()
         db.refresh(demo_user)
         print(f"[+] Demo user seeded: {demo_email}")
+
+    # Ensure dedicated UAT testing account exists for SDLC verification
+    uat_email = "uat.tester@finwise.ai"
+    uat_user = db.query(User).filter(User.email == uat_email).first()
+    if not uat_user:
+        uat_user = User(
+            email=uat_email,
+            hashed_password=get_password_hash("UatTesting2026!"),
+            full_name="UAT SDLC Tester",
+            is_active=True,
+        )
+        db.add(uat_user)
+        db.commit()
+        db.refresh(uat_user)
+        print(f"[+] UAT Tester user seeded: {uat_email}")
 
     # Check transactions
     tx_count = db.query(Transaction).filter(Transaction.user_id == demo_user.id).count()
