@@ -44,6 +44,13 @@ export const DashboardPage: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    return 'Good evening';
+  };
+
   const [summary, setSummary] = useState<TransactionSummaryData>({
     total_income: 0,
     total_expenses: 0,
@@ -150,7 +157,7 @@ export const DashboardPage: React.FC = () => {
               <span>FinWise AI Intelligence Core &bull; Production Platform Active</span>
             </div>
             <h2 className="text-2xl font-black tracking-tight text-white lg:text-3xl">
-              Welcome back, {user?.name || 'Explorer'}!
+              {getGreeting()}, {user?.name ? user.name.split(' ')[0] : 'Explorer'}!
             </h2>
             <p className="mt-1 text-sm text-slate-400 max-w-2xl">
               {summary.transactions_count > 0 ? (
@@ -197,23 +204,27 @@ export const DashboardPage: React.FC = () => {
       {anomalies.length > 0 && (
         <div
           onClick={() => navigate('/insights')}
-          className="cursor-pointer rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4 transition-all hover:border-amber-500/70 hover:bg-amber-500/15 backdrop-blur-md"
+          className="group cursor-pointer rounded-2xl border border-amber-500/40 bg-gradient-to-r from-amber-950/30 via-slate-900 to-slate-900 p-4 transition-all hover:border-amber-500/70 hover:bg-amber-500/15 backdrop-blur-md shadow-lg"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400">
+              <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400">
+                <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500" />
+                </span>
                 <AlertTriangle className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xs font-bold text-white">
+                <p className="text-xs font-bold text-white group-hover:text-amber-300 transition-colors">
                   {anomalies.length} Unusual Spending Outlier{anomalies.length > 1 ? 's' : ''} Flagged by Isolation Forest
                 </p>
                 <p className="text-[11px] text-amber-300/80">
-                  Statistical anomaly detected in your expense transactions. Click to review.
+                  Statistical anomaly detected in your expense transactions. Click to review explanation and accept/flag.
                 </p>
               </div>
             </div>
-            <span className="flex items-center gap-1 text-xs font-semibold text-amber-400 hover:text-amber-300">
+            <span className="flex items-center gap-1 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-400 transition-all group-hover:bg-amber-500/20">
               Review Now &rarr;
             </span>
           </div>

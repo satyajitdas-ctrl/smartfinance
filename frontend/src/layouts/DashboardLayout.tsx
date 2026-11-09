@@ -185,6 +185,20 @@ export const DashboardLayout: React.FC = () => {
             >
               <span>+ Add Transaction</span>
             </button>
+
+            {/* User Profile Avatar Pill */}
+            <div
+              onClick={() => navigate('/settings')}
+              className="flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-800/40 px-2.5 py-1 text-xs text-slate-300 hover:border-slate-700 transition-colors cursor-pointer"
+              title="View Profile & Settings"
+            >
+              <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-tr from-brand-600 to-indigo-500 text-[11px] font-bold text-white shadow-sm">
+                {user?.name ? user.name[0].toUpperCase() : 'U'}
+              </div>
+              <span className="hidden md:inline font-medium text-slate-200">
+                {user?.name ? user.name.split(' ')[0] : 'User'}
+              </span>
+            </div>
           </div>
         </header>
 

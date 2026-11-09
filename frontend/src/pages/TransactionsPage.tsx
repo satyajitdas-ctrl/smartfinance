@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Plus,
   Search,
+  X,
   ArrowUpRight,
   ArrowDownRight,
   Trash2,
@@ -290,8 +291,16 @@ export const TransactionsPage: React.FC = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search transactions by description..."
-            className="w-full rounded-xl border border-slate-800 bg-slate-950/70 pl-10 pr-4 py-2 text-xs text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none"
+            className="w-full rounded-xl border border-slate-800 bg-slate-950/70 pl-10 pr-9 py-2 text-xs text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none"
           />
+          {searchTerm && (
+            <button
+              onClick={() => setSearchTerm('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
         </div>
 
         {/* Filters */}
