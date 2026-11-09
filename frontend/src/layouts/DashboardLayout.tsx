@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { PageSkeleton } from '../components/PageSkeleton';
 import {
   LayoutDashboard,
   Receipt,
@@ -190,7 +191,9 @@ export const DashboardLayout: React.FC = () => {
         {/* Main Content Area */}
         <main className="flex-1 overflow-y-auto p-6 lg:p-8">
           <div className="mx-auto max-w-7xl">
-            <Outlet />
+            <Suspense fallback={<PageSkeleton />}>
+              <Outlet />
+            </Suspense>
           </div>
         </main>
       </div>

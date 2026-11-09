@@ -15,6 +15,33 @@ export const apiClient = axios.create({
   },
 });
 
+// Fast in-memory cache for ultra-responsive tab transitions
+interface CacheEntry<T> {
+  data: T;
+  timestamp: number;
+}
+const apiMemoryCache = new Map<string, CacheEntry<any>>();
+
+export const clearApiCache = () => {
+  apiMemoryCache.clear();
+};
+
+export const cachedGet = async <T>(
+  url: string,
+  params?: Record<string, any>,
+  ttlMs: number = 12000
+): Promise<T> => {
+  const cacheKey = `${url}:${JSON.stringify(params || {})}`;
+  const cached = apiMemoryCache.get(cacheKey);
+  if (cached && Date.now() - cached.timestamp < ttlMs) {
+    return cached.data;
+  }
+
+  const res = await apiClient.get<T>(url, { params });
+  apiMemoryCache.set(cacheKey, { data: res.data, timestamp: Date.now() });
+  return res.data;
+};
+
 // Attach Authorization header if access token exists
 apiClient.interceptors.request.use((config) => {
   const token = localStorage.getItem('finwise_token');
@@ -24,11 +51,18 @@ apiClient.interceptors.request.use((config) => {
   return config;
 });
 
-// Intercept 401 Unauthorized responses
+// Auto-invalidate cache on mutations & intercept 401 Unauthorized
 apiClient.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    const method = response.config.method?.toLowerCase();
+    if (method && ['post', 'put', 'delete', 'patch'].includes(method)) {
+      clearApiCache();
+    }
+    return response;
+  },
   (error) => {
     if (error.response && error.response.status === 401) {
+      clearApiCache();
       localStorage.removeItem('finwise_token');
       localStorage.removeItem('finwise_user');
       if (window.location.pathname !== '/login') {
@@ -41,8 +75,7 @@ apiClient.interceptors.response.use(
 
 // System Health API
 export const checkHealth = async (): Promise<SystemHealth> => {
-  const response = await apiClient.get<SystemHealth>('/health');
-  return response.data;
+  return cachedGet<SystemHealth>('/health', undefined, 30000);
 };
 
 // Auth APIs
@@ -52,6 +85,7 @@ export const registerUser = async (data: {
   password: string;
   currency?: string;
 }): Promise<AuthResponse> => {
+  clearApiCache();
   const response = await apiClient.post<AuthResponse>('/auth/register', data);
   return response.data;
 };
@@ -60,13 +94,13 @@ export const loginUser = async (data: {
   email: string;
   password: string;
 }): Promise<AuthResponse> => {
+  clearApiCache();
   const response = await apiClient.post<AuthResponse>('/auth/login', data);
   return response.data;
 };
 
 export const getCurrentUser = async (): Promise<User> => {
-  const response = await apiClient.get<User>('/auth/me');
-  return response.data;
+  return cachedGet<User>('/auth/me', undefined, 60000);
 };
 
 // Transaction APIs
@@ -131,8 +165,7 @@ export const deleteTransaction = async (id: number): Promise<{ message: string; 
 };
 
 export const getTransactionSummary = async (): Promise<TransactionSummaryData> => {
-  const response = await apiClient.get<TransactionSummaryData>('/transactions/summary');
-  return response.data;
+  return cachedGet<TransactionSummaryData>('/transactions/summary', undefined, 10000);
 };
 
 export const seedTransactions = async (): Promise<Transaction[]> => {
@@ -170,8 +203,11 @@ export const getCategoryBreakdown = async (): Promise<{
   total_expense: number;
   categories: CategoryBreakdownItem[];
 }> => {
-  const response = await apiClient.get('/analytics/category-breakdown');
-  return response.data;
+  return cachedGet<{ total_expense: number; categories: CategoryBreakdownItem[] }>(
+    '/analytics/category-breakdown',
+    undefined,
+    15000
+  );
 };
 
 export const getMonthlyComparison = async (): Promise<{
@@ -179,13 +215,15 @@ export const getMonthlyComparison = async (): Promise<{
   previous_month: string;
   categories: MonthlyComparisonItem[];
 }> => {
-  const response = await apiClient.get('/analytics/monthly-comparison');
-  return response.data;
+  return cachedGet<{
+    current_month: string;
+    previous_month: string;
+    categories: MonthlyComparisonItem[];
+  }>('/analytics/monthly-comparison', undefined, 15000);
 };
 
 export const getCashflowTrends = async (): Promise<CashflowTrendItem[]> => {
-  const response = await apiClient.get<CashflowTrendItem[]>('/analytics/cashflow-trends');
-  return response.data;
+  return cachedGet<CashflowTrendItem[]>('/analytics/cashflow-trends', undefined, 15000);
 };
 
 // Machine Learning APIs
@@ -213,8 +251,7 @@ export const correctCategory = async (data: {
 };
 
 export const getModelInfo = async (): Promise<any> => {
-  const response = await apiClient.get('/ml/model-info');
-  return response.data;
+  return cachedGet('/ml/model-info', undefined, 30000);
 };
 
 // ----------------------------------------------------
@@ -250,8 +287,7 @@ export const getBudgetsStatus = async (
   const params: any = {};
   if (month) params.month = month;
   if (year) params.year = year;
-  const response = await apiClient.get<BudgetStatusResponse>('/budgets/status', { params });
-  return response.data;
+  return cachedGet<BudgetStatusResponse>('/budgets/status', params, 10000);
 };
 
 export const createOrUpdateBudget = async (data: {
@@ -315,8 +351,7 @@ export interface ForecastResponse {
 }
 
 export const getAnomalies = async (): Promise<AnomalyItem[]> => {
-  const response = await apiClient.get<AnomalyItem[]>('/ml/anomalies');
-  return response.data;
+  return cachedGet<AnomalyItem[]>('/ml/anomalies', undefined, 10000);
 };
 
 export const triggerAnomalyScan = async (): Promise<{
@@ -339,8 +374,7 @@ export const reviewAnomaly = async (
 };
 
 export const getExpenseForecast = async (): Promise<ForecastResponse> => {
-  const response = await apiClient.get<ForecastResponse>('/ml/forecast');
-  return response.data;
+  return cachedGet<ForecastResponse>('/ml/forecast', undefined, 15000);
 };
 
 // ----------------------------------------------------
