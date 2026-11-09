@@ -190,7 +190,7 @@ export const DashboardLayout: React.FC = () => {
 
         {/* Main Content Area */}
         <main className="flex-1 overflow-y-auto p-6 lg:p-8">
-          <div className="mx-auto max-w-7xl">
+          <div key={location.pathname} className="mx-auto max-w-7xl animate-fade-in">
             <Suspense fallback={<PageSkeleton />}>
               <Outlet />
             </Suspense>

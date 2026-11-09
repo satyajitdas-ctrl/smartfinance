@@ -8,10 +8,43 @@
     --foreground: 0 0% 98%;
   }
 
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
     @apply bg-slate-950 text-slate-100 antialiased selection:bg-brand-500 selection:text-white min-h-screen;
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   }
+}
+
+@keyframes fadeInSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeInSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.smooth-interactive {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.smooth-interactive:hover {
+  transform: translateY(-2px);
+}
+
+.smooth-interactive:active {
+  transform: scale(0.98);
 }
 
 @layer utilities {
