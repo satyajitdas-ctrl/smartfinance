@@ -2,7 +2,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.core.database import engine, Base
+from app.core.database import engine, Base, SessionLocal
+from app.core.init_db import seed_initial_data
 import app.models  # Ensures all model tables are registered with Base metadata
 from app.api.v1.router import api_router
 
@@ -12,7 +13,12 @@ async def lifespan(app: FastAPI):
     """Application lifespan context manager: handles startup and shutdown logic."""
     # Create all database tables on startup if they do not exist
     Base.metadata.create_all(bind=engine)
-    print(f"[*] {settings.PROJECT_NAME} initialized database successfully.")
+    db = SessionLocal()
+    try:
+        seed_initial_data(db)
+    finally:
+        db.close()
+    print(f"[*] {settings.PROJECT_NAME} initialized database and seeded demo records successfully.")
     yield
     print(f"[*] {settings.PROJECT_NAME} shutting down cleanly.")
 
