@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, Shield, Lock, Mail, User as UserIcon, ArrowRight, AlertCircle, CheckCircle } from 'lucide-react';
+import {
+  Sparkles,
+  Shield,
+  Lock,
+  Mail,
+  User as UserIcon,
+  ArrowRight,
+  AlertCircle,
+  CheckCircle,
+  Zap,
+  UserPlus
+} from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export const LoginPage: React.FC = () => {
@@ -12,7 +23,7 @@ export const LoginPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const { login, register } = useAuth();
+  const { login, register, enterDirectly, quickRegisterNewUser } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -36,19 +47,45 @@ export const LoginPage: React.FC = () => {
     }
   };
 
+  const handleInstantAccess = async () => {
+    setError(null);
+    setLoading(true);
+    try {
+      await enterDirectly();
+      navigate('/');
+    } catch (err: any) {
+      setError(err.response?.data?.detail || err.message || 'Instant access failed.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleQuickNewUser = async () => {
+    setError(null);
+    setLoading(true);
+    try {
+      await quickRegisterNewUser(name || 'Personal User');
+      navigate('/');
+    } catch (err: any) {
+      setError(err.response?.data?.detail || err.message || 'Quick registration failed.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const fillDemoAccount = () => {
-    setIsRegister(false);
     setEmail('satyajit@example.com');
     setPassword('SecurePassword123!');
     setName('Satyajit Das');
+    setIsRegister(false);
     setError(null);
   };
 
   const fillUatAccount = () => {
-    setIsRegister(false);
     setEmail('uat.tester@finwise.ai');
     setPassword('UatTesting2026!');
     setName('UAT SDLC Tester');
+    setIsRegister(false);
     setError(null);
   };
 
@@ -59,18 +96,58 @@ export const LoginPage: React.FC = () => {
 
       <div className="relative w-full max-w-md">
         {/* Brand Banner */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-500 shadow-xl shadow-brand-500/25 mb-4">
             <Sparkles className="h-7 w-7 text-white" />
           </div>
           <h1 className="text-3xl font-extrabold tracking-tight text-white">FinWise AI</h1>
           <p className="mt-1 text-sm text-slate-400">
-            Intelligent Personal Finance & Machine Learning Assistant
+            Intelligent Personal Finance & Machine Learning Platform
           </p>
         </div>
 
-        {/* Card */}
-        <div className="overflow-hidden rounded-3xl border border-slate-800/80 bg-slate-900/80 p-8 shadow-2xl backdrop-blur-xl">
+        {/* 1-Click Frictionless Instant Access Hero Card */}
+        <div className="mb-5 overflow-hidden rounded-3xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/40 via-slate-900 to-slate-900 p-5 shadow-2xl backdrop-blur-xl">
+          <div className="flex items-center justify-between gap-3 mb-3">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400">
+                <Zap className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white">Instant Personal Access</h3>
+                <p className="text-[11px] text-emerald-400/80">Skip typing credentials &bull; 1-click enter</p>
+              </div>
+            </div>
+            <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-[10px] font-bold text-emerald-400 border border-emerald-500/30">
+              Personal Mode
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4">
+            <button
+              type="button"
+              onClick={handleInstantAccess}
+              disabled={loading}
+              className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-3.5 py-2.5 text-xs font-bold text-white shadow-lg shadow-emerald-600/30 transition-all hover:bg-emerald-500 active:scale-95 disabled:opacity-50"
+            >
+              <Zap className="h-4 w-4" />
+              <span>Enter as Satyajit</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleQuickNewUser}
+              disabled={loading}
+              className="flex items-center justify-center gap-2 rounded-xl border border-slate-700 bg-slate-800/80 px-3.5 py-2.5 text-xs font-bold text-slate-200 transition-all hover:bg-slate-700 active:scale-95 disabled:opacity-50"
+            >
+              <UserPlus className="h-4 w-4 text-brand-400" />
+              <span>New Fresh User</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Detailed Credentials Card */}
+        <div className="overflow-hidden rounded-3xl border border-slate-800/80 bg-slate-900/80 p-7 shadow-2xl backdrop-blur-xl">
           {/* Mode Switcher */}
           <div className="flex rounded-xl bg-slate-800/60 p-1 mb-6">
             <button
@@ -167,7 +244,7 @@ export const LoginPage: React.FC = () => {
                 <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
               ) : (
                 <>
-                  <span>{isRegister ? 'Create FinWise Account' : 'Sign In to Workspace'}</span>
+                  <span>{isRegister ? 'Register & Enter Workspace' : 'Sign In to Workspace'}</span>
                   <ArrowRight className="h-4 w-4" />
                 </>
               )}
@@ -203,7 +280,7 @@ export const LoginPage: React.FC = () => {
         </div>
 
         <p className="mt-6 text-center text-xs text-slate-500">
-          FinWise AI &bull; Secure JWT Authentication &bull; User-level data isolation
+          FinWise AI &bull; Secure JWT Authentication &bull; Automatic Personal Session
         </p>
       </div>
     </div>
