@@ -4,6 +4,11 @@
 
 @layer base {
   :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+  }
+
+  .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
   }
@@ -15,7 +20,7 @@
   }
 
   body {
-    @apply bg-slate-950 text-slate-100 antialiased selection:bg-brand-500 selection:text-white min-h-screen;
+    @apply bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 antialiased selection:bg-brand-500 selection:text-white min-h-screen transition-colors duration-200;
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   }
 }
@@ -49,10 +54,10 @@
 
 @layer utilities {
   .glass-panel {
-    @apply bg-slate-900/80 backdrop-blur-xl border border-slate-800/80 shadow-2xl;
+    @apply bg-white/90 border border-slate-200/80 shadow-lg backdrop-blur-xl dark:bg-slate-900/80 dark:border-slate-800/80 dark:shadow-2xl;
   }
   .glass-card {
-    @apply bg-slate-900/60 backdrop-blur-lg border border-slate-800/60 transition-all duration-200 hover:border-slate-700/80;
+    @apply bg-white/70 border border-slate-200/70 backdrop-blur-lg hover:border-slate-300/80 dark:bg-slate-900/60 dark:border-slate-800/60 dark:hover:border-slate-700/80 transition-all duration-200;
   }
   .badge-glow-emerald {
     box-shadow: 0 0 15px rgba(16, 185, 129, 0.25);
@@ -72,14 +77,22 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #cbd5e1;
   border-radius: 3px;
 }
 
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
 ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
   background: #475569;
 }
