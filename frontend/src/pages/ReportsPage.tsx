@@ -73,28 +73,28 @@ export const ReportsPage: React.FC = () => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold tracking-tight text-white">Reports & Statement Import</h2>
-        <p className="text-xs text-slate-400">
+        <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Reports & Statement Import</h2>
+        <p className="text-xs text-slate-500 dark:text-slate-400">
           Bulk import statements via CSV, detect duplicates, and export financial audit archives
         </p>
       </div>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {/* CSV Upload Card */}
-        <div className="rounded-2xl border border-slate-800/80 bg-slate-900/70 p-6 backdrop-blur-md flex flex-col justify-between">
+        <div className="rounded-2xl border border-slate-200/80 bg-white/80 p-6 shadow-sm backdrop-blur-md dark:border-slate-800/80 dark:bg-slate-900/70 dark:shadow-xl flex flex-col justify-between">
           <div>
-            <div className="flex items-center gap-2.5 text-brand-400 mb-2">
+            <div className="flex items-center gap-2.5 text-brand-600 dark:text-brand-400 mb-2">
               <Upload className="h-5 w-5" />
-              <h3 className="text-sm font-bold uppercase tracking-wider text-white">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white">
                 Import Transactions (CSV)
               </h3>
             </div>
-            <p className="text-xs text-slate-400 mb-5">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mb-5">
               Upload bank statements or transaction exports. FinWise AI validates rows, flags duplicate records, and auto-infers categories using Machine Learning.
             </p>
 
             {/* Dropzone */}
-            <div className="relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-700/80 bg-slate-950/50 p-8 text-center hover:border-brand-500/60 transition-colors">
+            <div className="relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50/70 p-8 text-center hover:border-brand-500/60 transition-colors dark:border-slate-700/80 dark:bg-slate-950/50">
               <input
                 type="file"
                 accept=".csv"
@@ -102,14 +102,14 @@ export const ReportsPage: React.FC = () => {
                 onChange={handleFileUpload}
                 className="absolute inset-0 cursor-pointer opacity-0 disabled:cursor-not-allowed"
               />
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-500/10 text-brand-400 mb-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-500/10 text-brand-600 dark:text-brand-400 mb-3">
                 {uploading ? (
-                  <RefreshCw className="h-6 w-6 animate-spin text-brand-400" />
+                  <RefreshCw className="h-6 w-6 animate-spin text-brand-600 dark:text-brand-400" />
                 ) : (
                   <FileSpreadsheet className="h-6 w-6" />
                 )}
               </div>
-              <p className="text-xs font-semibold text-white">
+              <p className="text-xs font-semibold text-slate-900 dark:text-white">
                 {uploading ? 'Parsing & validating statement...' : 'Click or drag a .csv file here'}
               </p>
               <p className="text-[11px] text-slate-500 mt-1">
@@ -118,11 +118,11 @@ export const ReportsPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="mt-5 flex items-center justify-between border-t border-slate-800/80 pt-4">
-            <span className="text-[11px] text-slate-400">Need the correct column format?</span>
+          <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4 dark:border-slate-800/80">
+            <span className="text-[11px] text-slate-500 dark:text-slate-400">Need the correct column format?</span>
             <button
               onClick={handleDownloadSample}
-              className="flex items-center gap-1.5 text-xs font-semibold text-brand-400 hover:text-brand-300 transition-colors"
+              className="flex items-center gap-1.5 text-xs font-semibold text-brand-600 hover:text-brand-500 dark:text-brand-400 dark:hover:text-brand-300 transition-colors"
             >
               <Download className="h-3.5 w-3.5" />
               <span>Download Sample CSV</span>
@@ -131,30 +131,30 @@ export const ReportsPage: React.FC = () => {
         </div>
 
         {/* CSV Export & Audit Card */}
-        <div className="rounded-2xl border border-slate-800/80 bg-slate-900/70 p-6 backdrop-blur-md flex flex-col justify-between">
+        <div className="rounded-2xl border border-slate-200/80 bg-white/80 p-6 shadow-sm backdrop-blur-md dark:border-slate-800/80 dark:bg-slate-900/70 dark:shadow-xl flex flex-col justify-between">
           <div>
-            <div className="flex items-center gap-2.5 text-emerald-400 mb-2">
+            <div className="flex items-center gap-2.5 text-emerald-600 dark:text-emerald-400 mb-2">
               <Download className="h-5 w-5" />
-              <h3 className="text-sm font-bold uppercase tracking-wider text-white">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white">
                 Export Financial Ledger (CSV)
               </h3>
             </div>
-            <p className="text-xs text-slate-400 mb-5">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mb-5">
               Export all your recorded transactions including category classifications, outlier scores, and anomaly verification status into a standard spreadsheet file.
             </p>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-4 space-y-2 mb-6">
-              <div className="flex items-center justify-between text-xs text-slate-300">
+            <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 space-y-2 mb-6 dark:border-slate-800 dark:bg-slate-950/60">
+              <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-300">
                 <span>File Format:</span>
-                <strong className="text-white">Comma-Separated Values (.csv)</strong>
+                <strong className="text-slate-900 dark:text-white">Comma-Separated Values (.csv)</strong>
               </div>
-              <div className="flex items-center justify-between text-xs text-slate-300">
+              <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-300">
                 <span>Data Isolation:</span>
-                <span className="text-emerald-400 font-semibold">Strictly Authenticated User Scope</span>
+                <span className="text-emerald-600 dark:text-emerald-400 font-semibold">Strictly Authenticated User Scope</span>
               </div>
-              <div className="flex items-center justify-between text-xs text-slate-300">
+              <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-300">
                 <span>Included Metadata:</span>
-                <span className="text-slate-400">Amount, Date, Type, Anomaly Flag</span>
+                <span className="text-slate-500 dark:text-slate-400">Amount, Date, Type, Anomaly Flag</span>
               </div>
             </div>
           </div>
@@ -172,42 +172,42 @@ export const ReportsPage: React.FC = () => {
 
       {/* Upload Telemetry Status Banner */}
       {uploadError && (
-        <div className="rounded-2xl border border-rose-500/30 bg-rose-500/10 p-4 text-xs text-rose-300 flex items-center gap-2">
-          <AlertCircle className="h-4 w-4 text-rose-400 shrink-0" />
+        <div className="rounded-2xl border border-rose-500/30 bg-rose-500/10 p-4 text-xs text-rose-600 dark:text-rose-300 flex items-center gap-2">
+          <AlertCircle className="h-4 w-4 text-rose-500 dark:text-rose-400 shrink-0" />
           <span>{uploadError}</span>
         </div>
       )}
 
       {importResult && (
-        <div className="rounded-2xl border border-emerald-500/30 bg-slate-900/80 p-6 backdrop-blur-md">
-          <div className="flex items-center gap-2 text-emerald-400 mb-3">
+        <div className="rounded-2xl border border-emerald-500/30 bg-white/90 p-6 shadow-sm backdrop-blur-md dark:bg-slate-900/80 dark:shadow-xl">
+          <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 mb-3">
             <CheckCircle className="h-5 w-5" />
-            <h3 className="text-sm font-bold uppercase tracking-wider text-white">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white">
               Statement Processing Report
             </h3>
           </div>
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-4 mb-4">
-            <div className="rounded-xl border border-slate-800 bg-slate-950/70 p-3">
-              <p className="text-[11px] text-slate-400">Rows Evaluated</p>
-              <p className="text-lg font-bold text-white mt-0.5">{importResult.total_rows_evaluated}</p>
+            <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 dark:border-slate-800 dark:bg-slate-950/70">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">Rows Evaluated</p>
+              <p className="text-lg font-bold text-slate-900 dark:text-white mt-0.5">{importResult.total_rows_evaluated}</p>
             </div>
-            <div className="rounded-xl border border-slate-800 bg-slate-950/70 p-3">
-              <p className="text-[11px] text-slate-400">Imported Successfully</p>
-              <p className="text-lg font-bold text-emerald-400 mt-0.5">{importResult.imported_count}</p>
+            <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 dark:border-slate-800 dark:bg-slate-950/70">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">Imported Successfully</p>
+              <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">{importResult.imported_count}</p>
             </div>
-            <div className="rounded-xl border border-slate-800 bg-slate-950/70 p-3">
-              <p className="text-[11px] text-slate-400">Duplicates Skipped</p>
-              <p className="text-lg font-bold text-amber-400 mt-0.5">{importResult.duplicates_skipped}</p>
+            <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 dark:border-slate-800 dark:bg-slate-950/70">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">Duplicates Skipped</p>
+              <p className="text-lg font-bold text-amber-600 dark:text-amber-400 mt-0.5">{importResult.duplicates_skipped}</p>
             </div>
-            <div className="rounded-xl border border-slate-800 bg-slate-950/70 p-3">
-              <p className="text-[11px] text-slate-400">Format Errors</p>
-              <p className="text-lg font-bold text-slate-300 mt-0.5">{importResult.errors_count}</p>
+            <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 dark:border-slate-800 dark:bg-slate-950/70">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">Format Errors</p>
+              <p className="text-lg font-bold text-slate-700 dark:text-slate-300 mt-0.5">{importResult.errors_count}</p>
             </div>
           </div>
 
           {importResult.errors.length > 0 && (
-            <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-300">
+            <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-700 dark:text-amber-300">
               <p className="font-semibold mb-1 flex items-center gap-1">
                 <AlertTriangle className="h-3.5 w-3.5" />
                 <span>Notice on skipped rows:</span>

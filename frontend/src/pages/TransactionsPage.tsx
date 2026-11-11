@@ -244,15 +244,15 @@ export const TransactionsPage: React.FC = () => {
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
           <div className="flex items-center gap-2.5">
-            <h2 className="text-2xl font-bold tracking-tight text-white">Transaction Management</h2>
+            <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Transaction Management</h2>
             {modelTelemetry && (
-              <span className="inline-flex items-center gap-1 rounded-full border border-purple-500/30 bg-purple-500/10 px-2.5 py-0.5 text-[11px] font-medium text-purple-300">
-                <Cpu className="h-3 w-3 text-purple-400" />
+              <span className="inline-flex items-center gap-1 rounded-full border border-purple-500/30 bg-purple-500/10 px-2.5 py-0.5 text-[11px] font-medium text-purple-700 dark:text-purple-300">
+                <Cpu className="h-3 w-3 text-purple-600 dark:text-purple-400" />
                 <span>TF-IDF Classifier Active</span>
               </span>
             )}
           </div>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             View, add, edit, and filter your financial ledger with automatic ML category inference
           </p>
         </div>
@@ -261,7 +261,7 @@ export const TransactionsPage: React.FC = () => {
           {transactions.length === 0 && !loading && (
             <button
               onClick={handleSeedData}
-              className="flex items-center gap-1.5 rounded-xl border border-indigo-500/40 bg-indigo-500/10 px-3.5 py-2 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/20 transition-colors"
+              className="flex items-center gap-1.5 rounded-xl border border-indigo-500/40 bg-indigo-500/10 px-3.5 py-2 text-xs font-semibold text-indigo-600 dark:text-indigo-300 hover:bg-indigo-500/20 transition-colors"
             >
               <Database className="h-3.5 w-3.5" />
               <span>Seed Sample Data</span>
@@ -282,21 +282,21 @@ export const TransactionsPage: React.FC = () => {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col gap-4 rounded-2xl border border-slate-800/80 bg-slate-900/70 p-4 backdrop-blur-md md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-4 rounded-2xl border border-slate-200/90 bg-white/90 shadow-sm dark:border-slate-800/80 dark:bg-slate-900/70 p-4 backdrop-blur-md md:flex-row md:items-center md:justify-between">
         {/* Search */}
         <div className="relative flex-1">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search transactions by description..."
-            className="w-full rounded-xl border border-slate-800 bg-slate-950/70 pl-10 pr-9 py-2 text-xs text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none"
+            className="w-full rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 dark:border-slate-800 dark:bg-slate-950/70 dark:text-white dark:placeholder-slate-500 pl-10 pr-9 py-2 text-xs focus:border-brand-500 focus:outline-none"
           />
           {searchTerm && (
             <button
               onClick={() => setSearchTerm('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-white"
             >
               <X className="h-3.5 w-3.5" />
             </button>
@@ -306,15 +306,15 @@ export const TransactionsPage: React.FC = () => {
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-3">
           {/* Type Toggle */}
-          <div className="flex rounded-xl bg-slate-950/80 p-1 border border-slate-800">
+          <div className="flex rounded-xl bg-slate-100 dark:bg-slate-950/80 p-1 border border-slate-200 dark:border-slate-800">
             {(['all', 'income', 'expense'] as const).map((t) => (
               <button
                 key={t}
                 onClick={() => setSelectedType(t)}
                 className={`rounded-lg px-3 py-1 text-xs font-medium capitalize transition-all ${
                   selectedType === t
-                    ? 'bg-brand-600 text-white'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-brand-600 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
                 }`}
               >
                 {t}
@@ -326,7 +326,7 @@ export const TransactionsPage: React.FC = () => {
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="rounded-xl border border-slate-800 bg-slate-950/80 px-3 py-2 text-xs text-slate-300 focus:border-brand-500 focus:outline-none"
+            className="rounded-xl border border-slate-200 bg-slate-50 text-slate-800 dark:border-slate-800 dark:bg-slate-950/80 dark:text-slate-300 px-3 py-2 text-xs focus:border-brand-500 focus:outline-none"
           >
             {categories.map((c) => (
               <option key={c} value={c}>
@@ -337,7 +337,7 @@ export const TransactionsPage: React.FC = () => {
 
           <button
             onClick={() => fetchTxList()}
-            className="rounded-xl border border-slate-800 bg-slate-950 p-2 text-slate-400 hover:text-white transition-colors"
+            className="rounded-xl border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-400 dark:hover:text-white p-2 transition-colors"
             title="Refresh List"
           >
             <RefreshCw className={`h-3.5 w-3.5 ${loading ? 'animate-spin' : ''}`} />
@@ -346,11 +346,11 @@ export const TransactionsPage: React.FC = () => {
       </div>
 
       {/* Transactions Table */}
-      <div className="overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/70 backdrop-blur-md">
+      <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white/90 shadow-sm dark:border-slate-800/80 dark:bg-slate-900/70 backdrop-blur-md">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-slate-800/80 bg-slate-950/40 text-[11px] uppercase tracking-wider text-slate-400">
+              <tr className="border-b border-slate-200 bg-slate-50/80 text-[11px] uppercase tracking-wider text-slate-500 dark:border-slate-800/80 dark:bg-slate-950/40 dark:text-slate-400">
                 <th className="px-6 py-4 font-semibold">Transaction</th>
                 <th className="px-6 py-4 font-semibold">Category</th>
                 <th className="px-6 py-4 font-semibold">Date</th>
@@ -359,7 +359,7 @@ export const TransactionsPage: React.FC = () => {
                 <th className="px-6 py-4 text-right font-semibold">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/50">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50">
               {loading && transactions.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="py-12 text-center text-xs text-slate-400">
@@ -385,14 +385,14 @@ export const TransactionsPage: React.FC = () => {
                 </tr>
               ) : (
                 transactions.map((tx) => (
-                  <tr key={tx.id} className="group hover:bg-slate-800/30 transition-colors">
+                  <tr key={tx.id} className="group hover:bg-slate-50/80 dark:hover:bg-slate-800/30 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div
                           className={`flex h-8 w-8 items-center justify-center rounded-lg ${
                             tx.transaction_type === 'income'
-                              ? 'bg-emerald-500/15 text-emerald-400'
-                              : 'bg-rose-500/15 text-rose-400'
+                              ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400'
+                              : 'bg-rose-500/15 text-rose-600 dark:text-rose-400'
                           }`}
                         >
                           {tx.transaction_type === 'income' ? (
@@ -402,9 +402,9 @@ export const TransactionsPage: React.FC = () => {
                           )}
                         </div>
                         <div>
-                          <p className="font-semibold text-white">{tx.description}</p>
+                          <p className="font-semibold text-slate-900 dark:text-white">{tx.description}</p>
                           {tx.is_flagged_anomaly && (
-                            <span className="inline-flex items-center gap-1 text-[11px] text-amber-400">
+                            <span className="inline-flex items-center gap-1 text-[11px] text-amber-600 dark:text-amber-400">
                               <AlertTriangle className="h-3 w-3" /> {tx.anomaly_reason || 'Unusual spending detected'}
                             </span>
                           )}
@@ -412,17 +412,17 @@ export const TransactionsPage: React.FC = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="rounded-lg bg-slate-800/80 px-2.5 py-1 text-xs font-medium text-slate-300">
+                      <span className="rounded-lg bg-slate-100 text-slate-700 border border-slate-200 dark:border-transparent dark:bg-slate-800/80 dark:text-slate-300 px-2.5 py-1 text-xs font-medium">
                         {tx.category}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-xs text-slate-400">{tx.transaction_date}</td>
+                    <td className="px-6 py-4 text-xs text-slate-500 dark:text-slate-400">{tx.transaction_date}</td>
                     <td className="px-6 py-4">
                       <span
                         className={`rounded-full px-2 py-0.5 text-[11px] font-semibold uppercase ${
                           tx.transaction_type === 'income'
-                            ? 'bg-emerald-500/10 text-emerald-400'
-                            : 'bg-rose-500/10 text-rose-400'
+                            ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                            : 'bg-rose-500/10 text-rose-600 dark:text-rose-400'
                         }`}
                       >
                         {tx.transaction_type}
@@ -430,7 +430,9 @@ export const TransactionsPage: React.FC = () => {
                     </td>
                     <td
                       className={`px-6 py-4 text-right font-bold ${
-                        tx.transaction_type === 'income' ? 'text-emerald-400' : 'text-slate-100'
+                        tx.transaction_type === 'income'
+                          ? 'text-emerald-600 dark:text-emerald-400'
+                          : 'text-slate-900 dark:text-slate-100'
                       }`}
                     >
                       {tx.transaction_type === 'income' ? '+' : '-'}₹{tx.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
@@ -439,14 +441,14 @@ export const TransactionsPage: React.FC = () => {
                       <div className="flex items-center justify-end gap-1">
                         <button
                           onClick={() => openEditModal(tx)}
-                          className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-brand-300 transition-colors"
+                          className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-brand-600 dark:hover:bg-slate-800 dark:hover:text-brand-300 transition-colors"
                           title="Edit Transaction"
                         >
                           <Edit2 className="h-3.5 w-3.5" />
                         </button>
                         <button
                           onClick={() => handleDeleteTx(tx.id)}
-                          className="rounded-lg p-1.5 text-slate-400 hover:bg-rose-500/10 hover:text-rose-400 transition-colors"
+                          className="rounded-lg p-1.5 text-slate-400 hover:bg-rose-500/10 hover:text-rose-600 dark:hover:text-rose-400 transition-colors"
                           title="Delete Transaction"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
@@ -463,24 +465,24 @@ export const TransactionsPage: React.FC = () => {
 
       {/* Add / Edit Transaction Modal */}
       {(isCreateOpen || editingTx) && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-2xl">
-            <h3 className="text-lg font-bold text-white mb-1">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-900 p-6">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">
               {editingTx ? 'Edit Transaction' : 'Add New Transaction'}
             </h3>
-            <p className="text-xs text-slate-400 mb-5">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mb-5">
               Enter transaction details in INR (₹). Records are immediately saved in your database.
             </p>
 
             {actionError && (
-              <div className="mb-4 rounded-xl border border-rose-500/30 bg-rose-500/10 p-2.5 text-xs text-rose-300">
+              <div className="mb-4 rounded-xl border border-rose-500/30 bg-rose-500/10 p-2.5 text-xs text-rose-600 dark:text-rose-300">
                 {actionError}
               </div>
             )}
 
             <form onSubmit={editingTx ? handleUpdateTx : handleCreateTx} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                   Transaction Type
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -490,7 +492,7 @@ export const TransactionsPage: React.FC = () => {
                     className={`rounded-xl py-2 text-xs font-bold transition-all ${
                       formType === 'expense'
                         ? 'bg-rose-600 text-white shadow-md'
-                        : 'border border-slate-800 text-slate-400 hover:text-white'
+                        : 'border border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-800 dark:text-slate-400 dark:hover:text-white'
                     }`}
                   >
                     Expense (-)
@@ -501,7 +503,7 @@ export const TransactionsPage: React.FC = () => {
                     className={`rounded-xl py-2 text-xs font-bold transition-all ${
                       formType === 'income'
                         ? 'bg-emerald-600 text-white shadow-md'
-                        : 'border border-slate-800 text-slate-400 hover:text-white'
+                        : 'border border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-800 dark:text-slate-400 dark:hover:text-white'
                     }`}
                   >
                     Income (+)
@@ -510,7 +512,7 @@ export const TransactionsPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                   Description
                 </label>
                 <input
@@ -519,33 +521,33 @@ export const TransactionsPage: React.FC = () => {
                   value={formDesc}
                   onChange={(e) => setFormDesc(e.target.value)}
                   placeholder="e.g. Swiggy Food Order, Uber Metro Commute, Amazon Purchase"
-                  className="w-full rounded-xl border border-slate-800 bg-slate-950 p-2.5 text-xs text-white focus:border-brand-500 focus:outline-none"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:text-white p-2.5 text-xs focus:border-brand-500 focus:outline-none"
                 />
 
                 {/* ML Inference Status */}
                 {predicting && (
-                  <div className="mt-1.5 flex items-center gap-1.5 text-[11px] text-purple-400 animate-pulse">
+                  <div className="mt-1.5 flex items-center gap-1.5 text-[11px] text-purple-600 dark:text-purple-400 animate-pulse">
                     <Sparkles className="h-3 w-3" />
                     <span>AI classifying transaction category using TF-IDF + Logistic Regression...</span>
                   </div>
                 )}
 
                 {mlPrediction && !predicting && (
-                  <div className="mt-2 flex items-center justify-between rounded-xl border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 text-xs text-purple-300">
+                  <div className="mt-2 flex items-center justify-between rounded-xl border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 text-xs text-purple-700 dark:text-purple-300">
                     <div className="flex items-center gap-1.5">
-                      <Sparkles className="h-3.5 w-3.5 text-purple-400" />
+                      <Sparkles className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
                       <span>
-                        AI Suggested: <strong className="text-white">{mlPrediction.predicted_category}</strong>{' '}
+                        AI Suggested: <strong className="text-slate-900 dark:text-white">{mlPrediction.predicted_category}</strong>{' '}
                         ({Math.round(mlPrediction.confidence * 100)}% confidence)
                       </span>
                     </div>
-                    <span className="text-[10px] text-slate-400 font-mono">v{mlPrediction.model_version}</span>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">v{mlPrediction.model_version}</span>
                   </div>
                 )}
 
                 {correctionFeedback && (
-                  <div className="mt-2 flex items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs text-emerald-300">
-                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+                  <div className="mt-2 flex items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs text-emerald-700 dark:text-emerald-300">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                     <span>{correctionFeedback}</span>
                   </div>
                 )}
@@ -553,7 +555,7 @@ export const TransactionsPage: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">
                     Amount (₹)
                   </label>
                   <input
@@ -564,17 +566,17 @@ export const TransactionsPage: React.FC = () => {
                     value={formAmount}
                     onChange={(e) => setFormAmount(e.target.value)}
                     placeholder="₹500"
-                    className="w-full rounded-xl border border-slate-800 bg-slate-950 p-2.5 text-xs text-white focus:border-brand-500 focus:outline-none"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:text-white p-2.5 text-xs focus:border-brand-500 focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1.5">
-                    Category {mlPrediction && <span className="text-[10px] text-purple-400 font-normal">(Auto-selected)</span>}
+                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                    Category {mlPrediction && <span className="text-[10px] text-purple-600 dark:text-purple-400 font-normal">(Auto-selected)</span>}
                   </label>
                   <select
                     value={formCategory}
                     onChange={(e) => handleCategoryChange(e.target.value)}
-                    className="w-full rounded-xl border border-slate-800 bg-slate-950 p-2.5 text-xs text-white focus:border-brand-500 focus:outline-none"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:text-white p-2.5 text-xs focus:border-brand-500 focus:outline-none"
                   >
                     {categories.filter((c) => c !== 'All').map((c) => (
                       <option key={c} value={c}>
@@ -586,12 +588,12 @@ export const TransactionsPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">Date</label>
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">Date</label>
                 <input
                   type="date"
                   value={formDate}
                   onChange={(e) => setFormDate(e.target.value)}
-                  className="w-full rounded-xl border border-slate-800 bg-slate-950 p-2.5 text-xs text-white focus:border-brand-500 focus:outline-none"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:text-white p-2.5 text-xs focus:border-brand-500 focus:outline-none"
                 />
               </div>
 
@@ -602,7 +604,7 @@ export const TransactionsPage: React.FC = () => {
                     setIsCreateOpen(false);
                     setEditingTx(null);
                   }}
-                  className="rounded-xl px-4 py-2 text-xs font-semibold text-slate-400 hover:text-white"
+                  className="rounded-xl px-4 py-2 text-xs font-semibold text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white"
                 >
                   Cancel
                 </button>

@@ -157,13 +157,13 @@ export const AssistantPage: React.FC = () => {
       <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-2xl font-bold tracking-tight text-white">AI Finance Assistant</h2>
-            <span className="flex items-center gap-1 rounded-full border border-purple-500/30 bg-purple-500/10 px-2.5 py-0.5 text-[11px] font-medium text-purple-300">
-              <Cpu className="h-3 w-3 text-purple-400" />
+            <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">AI Finance Assistant</h2>
+            <span className="flex items-center gap-1 rounded-full border border-purple-500/30 bg-purple-50 px-2.5 py-0.5 text-[11px] font-medium text-purple-700 dark:bg-purple-500/10 dark:text-purple-300">
+              <Cpu className="h-3 w-3 text-purple-600 dark:text-purple-400" />
               <span>Grounded in DB Ledger</span>
             </span>
           </div>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             Ask factual questions answered directly from your authenticated financial database
           </p>
         </div>
@@ -171,7 +171,7 @@ export const AssistantPage: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={handleClearHistory}
-            className="flex items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-900/80 px-3 py-1.5 text-xs font-semibold text-slate-400 hover:bg-slate-800 hover:text-white transition-colors"
+            className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 shadow-sm hover:bg-slate-50 hover:text-slate-900 transition-colors dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
             title="Clear Chat History"
           >
             <Trash2 className="h-3.5 w-3.5" />
@@ -181,10 +181,10 @@ export const AssistantPage: React.FC = () => {
       </div>
 
       {/* Chat Messages Container */}
-      <div className="flex-1 overflow-y-auto rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 sm:p-6 backdrop-blur-md space-y-4">
+      <div className="flex-1 overflow-y-auto rounded-2xl border border-slate-200/80 bg-white/80 p-4 sm:p-6 shadow-sm backdrop-blur-md dark:border-slate-800/80 dark:bg-slate-900/60 dark:shadow-xl space-y-4">
         {loadingHistory ? (
           <div className="flex items-center justify-center py-12 text-xs text-slate-400 gap-2">
-            <RefreshCw className="h-4 w-4 animate-spin text-purple-400" />
+            <RefreshCw className="h-4 w-4 animate-spin text-purple-500" />
             <span>Loading conversation history...</span>
           </div>
         ) : (
@@ -196,7 +196,7 @@ export const AssistantPage: React.FC = () => {
                 className={`flex gap-3 ${isAsst ? 'justify-start' : 'justify-end'}`}
               >
                 {isAsst && (
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-purple-600/20 border border-purple-500/30 text-purple-400">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-purple-100 border border-purple-200 text-purple-700 dark:bg-purple-600/20 dark:border-purple-500/30 dark:text-purple-400">
                     <Bot className="h-4 w-4" />
                   </div>
                 )}
@@ -204,14 +204,14 @@ export const AssistantPage: React.FC = () => {
                 <div
                   className={`max-w-[85%] sm:max-w-[70%] rounded-2xl px-4 py-3 text-xs leading-relaxed shadow-sm ${
                     isAsst
-                      ? 'border border-slate-800 bg-slate-950/80 text-slate-200'
+                      ? 'border border-slate-200 bg-slate-50 text-slate-800 dark:border-slate-800 dark:bg-slate-950/80 dark:text-slate-200'
                       : 'bg-brand-600 text-white shadow-brand-600/20'
                   }`}
                 >
                   <div className="whitespace-pre-line">{m.text}</div>
                   <div
                     className={`mt-1.5 text-[10px] text-right ${
-                      isAsst ? 'text-slate-500' : 'text-brand-200'
+                      isAsst ? 'text-slate-400 dark:text-slate-500' : 'text-brand-200'
                     }`}
                   >
                     {m.time}
@@ -219,7 +219,7 @@ export const AssistantPage: React.FC = () => {
                 </div>
 
                 {!isAsst && (
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-brand-600 text-white font-bold text-xs">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-brand-600 text-white font-bold text-xs shadow-sm">
                     <User className="h-4 w-4" />
                   </div>
                 )}
@@ -230,14 +230,14 @@ export const AssistantPage: React.FC = () => {
 
         {isTyping && (
           <div className="flex gap-3 justify-start">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-purple-600/20 border border-purple-500/30 text-purple-400">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-purple-100 border border-purple-200 text-purple-700 dark:bg-purple-600/20 dark:border-purple-500/30 dark:text-purple-400">
               <Bot className="h-4 w-4" />
             </div>
-            <div className="flex items-center gap-1.5 rounded-2xl border border-slate-800 bg-slate-950/80 px-4 py-3 text-xs text-slate-400">
-              <div className="h-2 w-2 rounded-full bg-purple-400 animate-bounce" style={{ animationDelay: '0ms' }} />
-              <div className="h-2 w-2 rounded-full bg-purple-400 animate-bounce" style={{ animationDelay: '150ms' }} />
-              <div className="h-2 w-2 rounded-full bg-purple-400 animate-bounce" style={{ animationDelay: '300ms' }} />
-              <span className="ml-1 text-[11px] text-slate-400">Calculating ledger metrics...</span>
+            <div className="flex items-center gap-1.5 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-600 dark:border-slate-800 dark:bg-slate-950/80 dark:text-slate-400">
+              <div className="h-2 w-2 rounded-full bg-purple-500 dark:bg-purple-400 animate-bounce" style={{ animationDelay: '0ms' }} />
+              <div className="h-2 w-2 rounded-full bg-purple-500 dark:bg-purple-400 animate-bounce" style={{ animationDelay: '150ms' }} />
+              <div className="h-2 w-2 rounded-full bg-purple-500 dark:bg-purple-400 animate-bounce" style={{ animationDelay: '300ms' }} />
+              <span className="ml-1 text-[11px] text-slate-500 dark:text-slate-400">Calculating ledger metrics...</span>
             </div>
           </div>
         )}
@@ -247,8 +247,8 @@ export const AssistantPage: React.FC = () => {
 
       {/* Suggested Quick Prompts */}
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-[11px] font-semibold text-slate-400 flex items-center gap-1">
-          <Sparkles className="h-3 w-3 text-purple-400" />
+        <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1">
+          <Sparkles className="h-3 w-3 text-purple-500 dark:text-purple-400" />
           <span>Quick Prompts:</span>
         </span>
         {suggestedQuestions.map((q) => (
@@ -256,7 +256,7 @@ export const AssistantPage: React.FC = () => {
             key={q}
             onClick={() => handleSend(q)}
             disabled={isTyping}
-            className="rounded-xl border border-slate-800 bg-slate-900/80 px-3 py-1.5 text-[11px] text-slate-300 hover:border-purple-500/40 hover:bg-purple-500/10 hover:text-white transition-colors disabled:opacity-50"
+            className="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-medium text-slate-700 shadow-2xs hover:border-purple-300 hover:bg-purple-50 hover:text-purple-700 transition-colors disabled:opacity-50 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300 dark:hover:border-purple-500/40 dark:hover:bg-purple-500/10 dark:hover:text-white"
           >
             {q}
           </button>
@@ -274,7 +274,7 @@ export const AssistantPage: React.FC = () => {
           }}
           disabled={isTyping}
           placeholder="Ask a question about your spending, categories, savings, or budget limits..."
-          className="w-full rounded-2xl border border-slate-800 bg-slate-900/90 pl-4 pr-12 py-3 text-xs text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none backdrop-blur-md"
+          className="w-full rounded-2xl border border-slate-200 bg-white pl-4 pr-12 py-3 text-xs text-slate-900 placeholder-slate-400 shadow-sm focus:border-brand-500 focus:outline-none backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/90 dark:text-white dark:placeholder-slate-500"
         />
 
         <button

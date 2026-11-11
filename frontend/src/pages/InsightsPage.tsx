@@ -146,8 +146,8 @@ export const InsightsPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-white">AI Insights & Anomaly Detection</h2>
-          <p className="text-xs text-slate-400">
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">AI Insights & Anomaly Detection</h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             Machine Learning models monitoring spending patterns, outliers, and monthly projections
           </p>
         </div>
@@ -163,40 +163,40 @@ export const InsightsPage: React.FC = () => {
       </div>
 
       {scanMessage && (
-        <div className="flex items-center gap-2 rounded-xl border border-purple-500/30 bg-purple-500/10 px-4 py-2.5 text-xs text-purple-300">
-          <CheckCircle2 className="h-4 w-4 text-purple-400" />
+        <div className="flex items-center gap-2 rounded-xl border border-purple-500/30 bg-purple-500/10 px-4 py-2.5 text-xs text-purple-700 dark:text-purple-300">
+          <CheckCircle2 className="h-4 w-4 text-purple-600 dark:text-purple-400" />
           <span>{scanMessage}</span>
         </div>
       )}
 
       {/* Unusually High / Flagged Transactions Section */}
-      <div className="rounded-2xl border border-amber-500/30 bg-slate-900/70 p-6 backdrop-blur-md">
+      <div className="rounded-2xl border border-amber-500/30 bg-white/80 p-6 shadow-sm backdrop-blur-md dark:bg-slate-900/70 dark:shadow-xl">
         <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center mb-2">
-          <div className="flex items-center gap-2.5 text-amber-400">
+          <div className="flex items-center gap-2.5 text-amber-600 dark:text-amber-400">
             <AlertTriangle className="h-5 w-5" />
             <h3 className="text-sm font-bold uppercase tracking-wider">
               Unusual Transactions Flagged for Review
             </h3>
           </div>
-          <span className="text-[11px] font-semibold text-slate-400">
+          <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
             Algorithm: Scikit-learn Isolation Forest + Category Z-Score
           </span>
         </div>
 
-        <p className="text-xs text-slate-400 mb-5">
+        <p className="text-xs text-slate-500 dark:text-slate-400 mb-5">
           *Important Notice: Flagged transactions are statistical outliers detected by Scikit-learn Isolation Forest, not confirmed fraud.
         </p>
 
         {loading ? (
           <div className="flex items-center justify-center py-8 text-xs text-slate-400 gap-2">
-            <RefreshCw className="h-4 w-4 animate-spin text-amber-400" />
+            <RefreshCw className="h-4 w-4 animate-spin text-amber-500" />
             <span>Scanning transaction history for anomalies...</span>
           </div>
         ) : anomalies.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-800 py-8 text-center">
-            <ShieldCheck className="h-8 w-8 text-emerald-400 mb-2" />
-            <p className="text-xs font-semibold text-white">No Statistical Anomalies Detected</p>
-            <p className="text-[11px] text-slate-400 mt-0.5">
+          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 dark:border-slate-800 py-8 text-center">
+            <ShieldCheck className="h-8 w-8 text-emerald-500 dark:text-emerald-400 mb-2" />
+            <p className="text-xs font-semibold text-slate-900 dark:text-white">No Statistical Anomalies Detected</p>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
               Your spending history matches normal Gaussian distribution thresholds.
             </p>
           </div>
@@ -205,46 +205,46 @@ export const InsightsPage: React.FC = () => {
             {anomalies.map((anom) => (
               <div
                 key={anom.transaction_id}
-                className="flex flex-col justify-between gap-4 rounded-xl border border-slate-800 bg-slate-950/70 p-4 sm:flex-row sm:items-center hover:border-amber-500/30 transition-colors"
+                className="flex flex-col justify-between gap-4 rounded-xl border border-slate-200 bg-slate-50/70 p-4 sm:flex-row sm:items-center hover:border-amber-500/40 transition-colors dark:border-slate-800 dark:bg-slate-950/70 dark:hover:border-amber-500/30"
               >
                 <div>
                   <div className="flex items-center gap-2">
-                    <h4 className="font-bold text-white text-sm">{anom.description}</h4>
-                    <span className="rounded bg-amber-500/15 px-2 py-0.5 text-[11px] font-semibold text-amber-400 border border-amber-500/20">
+                    <h4 className="font-bold text-slate-900 dark:text-white text-sm">{anom.description}</h4>
+                    <span className="rounded bg-amber-500/15 px-2 py-0.5 text-[11px] font-semibold text-amber-700 dark:text-amber-400 border border-amber-500/20">
                       Outlier Score: {anom.anomaly_score}
                     </span>
                     {anom.review_status === 'confirmed_ok' ? (
-                      <span className="rounded bg-emerald-500/15 px-2 py-0.5 text-[11px] font-semibold text-emerald-400 border border-emerald-500/20">
+                      <span className="rounded bg-emerald-500/15 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
                         Verified OK
                       </span>
                     ) : (
-                      <span className="rounded bg-rose-500/15 px-2 py-0.5 text-[11px] font-semibold text-rose-400 border border-rose-500/20">
+                      <span className="rounded bg-rose-500/15 px-2 py-0.5 text-[11px] font-semibold text-rose-700 dark:text-rose-400 border border-rose-500/20">
                         Unreviewed
                       </span>
                     )}
                   </div>
-                  <p className="mt-1 text-xs text-slate-400">{anom.anomaly_reason}</p>
-                  <div className="mt-2 flex items-center gap-3 text-xs text-slate-500">
-                    <span>Category: <strong className="text-slate-300">{anom.category}</strong></span>
+                  <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">{anom.anomaly_reason}</p>
+                  <div className="mt-2 flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
+                    <span>Category: <strong className="text-slate-700 dark:text-slate-300">{anom.category}</strong></span>
                     <span>&bull;</span>
                     <span>Date: {anom.transaction_date}</span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="text-lg font-bold text-white">
+                  <span className="text-lg font-bold text-slate-900 dark:text-white">
                     ₹{anom.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                   </span>
                   {anom.review_status !== 'confirmed_ok' ? (
                     <button
                       onClick={() => handleReviewAnomaly(anom.transaction_id)}
                       disabled={reviewingId === anom.transaction_id}
-                      className="rounded-xl border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-200 hover:bg-slate-700 transition-colors disabled:opacity-50"
+                      className="rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm hover:bg-slate-100 transition-colors disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
                     >
                       {reviewingId === anom.transaction_id ? 'Saving...' : 'Mark Verified'}
                     </button>
                   ) : (
-                    <span className="text-xs text-emerald-400 flex items-center gap-1">
+                    <span className="text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1 font-medium">
                       <CheckCircle className="h-3.5 w-3.5" /> Reviewed
                     </span>
                   )}
@@ -257,31 +257,31 @@ export const InsightsPage: React.FC = () => {
 
       {/* Automated Behavioral Insights Grid */}
       <div>
-        <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400 mb-3">
+        <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3">
           Algorithmic Financial Insights
         </h3>
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
           {generatedInsights.length === 0 ? (
-            <div className="col-span-3 rounded-2xl border border-dashed border-slate-800 p-6 text-center text-xs text-slate-400">
+            <div className="col-span-3 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 p-6 text-center text-xs text-slate-500 dark:text-slate-400">
               Record more transactions to populate automated behavioral insights.
             </div>
           ) : (
             generatedInsights.map((ins) => (
               <div
                 key={ins.id}
-                className="flex flex-col justify-between rounded-2xl border border-slate-800/80 bg-slate-900/70 p-5 shadow-lg backdrop-blur-md"
+                className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white/80 p-5 shadow-sm backdrop-blur-md dark:border-slate-800/80 dark:bg-slate-900/70 dark:shadow-lg"
               >
                 <div>
                   <div className="flex items-center gap-2 mb-3">
-                    {ins.type === 'positive' && <CheckCircle className="h-4 w-4 text-emerald-400" />}
-                    {ins.type === 'warning' && <AlertTriangle className="h-4 w-4 text-amber-400" />}
-                    {ins.type === 'info' && <Sparkles className="h-4 w-4 text-brand-400" />}
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                    {ins.type === 'positive' && <CheckCircle className="h-4 w-4 text-emerald-500 dark:text-emerald-400" />}
+                    {ins.type === 'warning' && <AlertTriangle className="h-4 w-4 text-amber-500 dark:text-amber-400" />}
+                    {ins.type === 'info' && <Sparkles className="h-4 w-4 text-brand-500 dark:text-brand-400" />}
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                       Calculated from Ledger
                     </span>
                   </div>
-                  <h4 className="text-sm font-bold text-white mb-1.5">{ins.title}</h4>
-                  <p className="text-xs text-slate-300 leading-relaxed">{ins.message}</p>
+                  <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-1.5">{ins.title}</h4>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{ins.message}</p>
                 </div>
               </div>
             ))
@@ -290,86 +290,86 @@ export const InsightsPage: React.FC = () => {
       </div>
 
       {/* ML Forecasting Section */}
-      <div className="rounded-2xl border border-brand-500/30 bg-slate-900/70 p-6 backdrop-blur-md">
+      <div className="rounded-2xl border border-brand-500/30 bg-white/80 p-6 shadow-sm backdrop-blur-md dark:bg-slate-900/70 dark:shadow-xl">
         <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center mb-2">
-          <div className="flex items-center gap-2 text-brand-400">
+          <div className="flex items-center gap-2 text-brand-600 dark:text-brand-400">
             <Sparkles className="h-5 w-5" />
             <h3 className="text-sm font-bold uppercase tracking-wider">
               ML Monthly Spending Forecast ({forecast?.forecast_month || 'Next Month'})
             </h3>
           </div>
-          <span className="text-[11px] font-mono text-slate-400">
+          <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
             Time-Series Moving Average + Polynomial Trend Regression
           </span>
         </div>
 
-        <p className="text-xs text-slate-400 mb-5">
+        <p className="text-xs text-slate-500 dark:text-slate-400 mb-5">
           Projects category commitments for {forecast?.forecast_month || 'upcoming month'} based on spending velocity and historical patterns:
         </p>
 
         {forecast && (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 mb-6">
-            <div className="rounded-xl border border-slate-800 bg-slate-950/70 p-4">
-              <p className="text-xs text-slate-400">Projected Expenses</p>
-              <p className="text-xl font-extrabold text-white mt-1">
+            <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-950/70">
+              <p className="text-xs text-slate-500 dark:text-slate-400">Projected Expenses</p>
+              <p className="text-xl font-extrabold text-slate-900 dark:text-white mt-1">
                 ₹{forecast.total_predicted_expense.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
               </p>
-              <p className={`text-[11px] mt-1 ${forecast.is_budget_exceeded ? 'text-rose-400' : 'text-emerald-400'}`}>
+              <p className={`text-[11px] mt-1 font-medium ${forecast.is_budget_exceeded ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
                 {forecast.is_budget_exceeded
                   ? `↑ ₹${Math.abs(forecast.budget_variance).toLocaleString('en-IN')} over budget`
                   : `↓ ₹${Math.abs(forecast.budget_variance).toLocaleString('en-IN')} below allocated budget`}
               </p>
             </div>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-950/70 p-4">
-              <p className="text-xs text-slate-400">Current Monthly Budget</p>
-              <p className="text-xl font-extrabold text-slate-200 mt-1">
+            <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-950/70">
+              <p className="text-xs text-slate-500 dark:text-slate-400">Current Monthly Budget</p>
+              <p className="text-xl font-extrabold text-slate-700 dark:text-slate-200 mt-1">
                 ₹{forecast.current_budget.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
               </p>
-              <p className="text-[11px] text-slate-400 mt-1">Sum of active category thresholds</p>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Sum of active category thresholds</p>
             </div>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-950/70 p-4">
-              <p className="text-xs text-slate-400">Algorithm Status</p>
-              <p className="text-xl font-extrabold text-brand-400 mt-1">Operational</p>
-              <p className="text-[11px] text-slate-400 mt-1">Weighted WMA + Linear Polyfit</p>
+            <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-950/70">
+              <p className="text-xs text-slate-500 dark:text-slate-400">Algorithm Status</p>
+              <p className="text-xl font-extrabold text-brand-600 dark:text-brand-400 mt-1">Operational</p>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Weighted WMA + Linear Polyfit</p>
             </div>
           </div>
         )}
 
         {/* Category-wise Forecast Breakdown */}
         {forecast && forecast.categories.length > 0 && (
-          <div className="rounded-xl border border-slate-800/80 bg-slate-950/40 p-4">
-            <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">
+          <div className="rounded-xl border border-slate-200/80 bg-slate-50/60 p-4 dark:border-slate-800/80 dark:bg-slate-950/40">
+            <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-3">
               Category-Wise Spending Projections
             </h4>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {forecast.categories.map((c) => (
                 <div
                   key={c.category}
-                  className="flex items-center justify-between rounded-lg border border-slate-800/60 bg-slate-900/60 p-3"
+                  className="flex items-center justify-between rounded-lg border border-slate-200 bg-white p-3 shadow-xs dark:border-slate-800/60 dark:bg-slate-900/60"
                 >
                   <div>
-                    <span className="text-xs font-bold text-white">{c.category}</span>
-                    <p className="text-[11px] text-slate-400">
+                    <span className="text-xs font-bold text-slate-900 dark:text-white">{c.category}</span>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">
                       Hist. Avg: ₹{c.historical_avg.toLocaleString('en-IN', { minimumFractionDigits: 0 })}
                     </p>
                   </div>
                   <div className="text-right">
-                    <span className="text-xs font-bold text-brand-300">
+                    <span className="text-xs font-bold text-brand-600 dark:text-brand-300">
                       ₹{c.predicted_amount.toLocaleString('en-IN', { minimumFractionDigits: 0 })}
                     </span>
                     <div className="flex items-center justify-end gap-1 text-[10px]">
                       {c.trend === 'increasing' ? (
-                        <span className="text-rose-400 flex items-center gap-0.5">
+                        <span className="text-rose-600 dark:text-rose-400 flex items-center gap-0.5">
                           <TrendingUp className="h-3 w-3" /> Rising
                         </span>
                       ) : c.trend === 'decreasing' ? (
-                        <span className="text-emerald-400 flex items-center gap-0.5">
+                        <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-0.5">
                           <TrendingDown className="h-3 w-3" /> Falling
                         </span>
                       ) : (
-                        <span className="text-slate-400">Stable</span>
+                        <span className="text-slate-500 dark:text-slate-400">Stable</span>
                       )}
                     </div>
                   </div>
